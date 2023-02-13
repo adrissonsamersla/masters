@@ -1,0 +1,5 @@
+# Automatically generated grSim configuration files should not be versioned
+# Nor the parameters for ITAndroids robots
+
+.grsim_*.xml
+itandroids_*.ini

@@ -1,0 +1,27 @@
+SmallSizeLeague-v1:
+  normalize: true
+  n_envs: 10
+  policy: 'MlpPolicy'
+  n_timesteps: 1000000
+  batch_size: 512
+  n_steps: 512
+  gamma: 0.99
+  learning_rate: 0.0003
+  ent_coef: 0.01
+  clip_range: 0.25
+  n_epochs: 10
+  gae_lambda: 0.9
+  use_sde: true
+  max_grad_norm: 0.5
+  vf_coef: 0.5
+  policy_kwargs: "dict(
+                    log_std_init=-2,
+                    ortho_init=False,
+                    activation_fn=nn.Tanh,
+                    net_arch=[1024, 1024]
+                  )"
+
+# python ../train.py --algo ppo --env SmallSizeLeague-v1 \
+# --eval-freq 10000 --eval-episodes 50 --n-eval-envs 10 --save-freq 100000 \
+# --yaml-file ppo.yml --tensorboard-log tmp/stable-baselines/ \
+# --device cuda --vec-env subproc &> executions/debug_client.txt 2>&1

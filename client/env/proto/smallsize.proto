@@ -1,0 +1,86 @@
+syntax = "proto3";
+
+package api;
+
+// gRPC service declaration
+// service Trainer {
+//    rpc SetupEnvironment(SetupEnvRequest) returns (SetupEnvResponse) {}
+//    rpc Simulate(SimulationRequest) returns (SimulationResponse) {}
+//    rpc StartEpisode(EpisodeRequest) returns (EpisodeResponse) {}
+//    rpc CloseEnvironment(CloseRequest) returns (CloseResponse) {}
+//}
+
+enum RequestType {
+  SetupEnvRequestType = 0;
+  SimulationRequestType = 1;
+  EpisodeRequestType = 2;
+  CloseRequestType = 3;
+}
+
+enum ResponseType {
+  SetupEnvResponseType = 0;
+  SimulationResponseType = 1;
+  EpisodeResponseType = 2;
+  CloseResponseType = 3;
+}
+
+message WrapperRequest {
+  RequestType type = 1;
+  oneof content {
+    SetupEnvRequest setup_env = 2;
+    SimulationRequest simulation_env = 3;
+    EpisodeRequest episode = 4;
+    CloseRequest close = 5;
+  };
+}
+
+message WrapperResponse {
+  ResponseType type = 1;
+  oneof content {
+    SetupEnvResponse setup_env = 2;
+    SimulationResponse simulation_env = 3;
+    EpisodeResponse episode = 4;
+    CloseResponse close = 5;
+  };
+}
+
+//
+// Server Messages
+//
+
+/// Setups the whole environment. Called in constructor.
+message SetupEnvRequest {}
+
+/// Returns general information about the agent/environment/task.
+message SetupEnvResponse {
+  int32 num_state_dim = 1;
+  int32 num_action_dim = 2;
+  repeated double action_bound = 3;
+}
+
+/// Initializes the environment for the new episode. Called in reset.
+message EpisodeRequest {}
+
+/// Returns the initial state.
+message EpisodeResponse { State state = 1; }
+
+/// Executes one step of simulation. Called in step.
+message SimulationRequest { Action action = 1; }
+
+/// Returns the result of the step.
+message SimulationResponse {
+  State state = 1;
+  double reward = 2;
+  bool done = 3;
+}
+
+/// Closes the simulator and the agent(s). Called in close.
+message CloseRequest {}
+
+/// Returns meaning that everything has shutdown gracefully.
+message CloseResponse {}
+
+// Environment Messages
+message Action { repeated double action = 1; }
+
+message State { repeated double observation = 1; }

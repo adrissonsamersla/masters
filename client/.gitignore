@@ -1,0 +1,6 @@
+# Byte-compiled code
+__pycache__/
+
+# Folders with raw data from executions (too big to be versioned)
+logs/*
+tmp/*
